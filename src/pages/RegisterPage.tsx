@@ -13,11 +13,10 @@ const RegisterPage = () => {
 	});
 
 	const dispatch = useAppDispatch();
-	const { userRegisterLoading, userRegisterError } = useAppSelector(
-		(state) => state.user,
-	);
+	const { userRegisterLoading, userRegisterError, userRegisterSucces } =
+		useAppSelector((state) => state.user);
 
-	function onSubmit() {
+	async function onSubmit() {
 		for (const value of Object.values(registerData)) {
 			if (!value.trim()) {
 				return alert("Fill all inputs!");
@@ -25,6 +24,14 @@ const RegisterPage = () => {
 		}
 
 		dispatch(registerUser(registerData));
+
+		if (userRegisterSucces) {
+			setRegisterData({
+				email: "",
+				password: "",
+				username: "",
+			});
+		}
 	}
 
 	return (
@@ -40,6 +47,7 @@ const RegisterPage = () => {
 					required
 					type="text"
 					placeholder="Username"
+					value={registerData.username}
 					onChange={(e) =>
 						setRegisterData({
 							...registerData,
@@ -52,6 +60,7 @@ const RegisterPage = () => {
 					required
 					type="email"
 					placeholder="Email"
+					value={registerData.email}
 					onChange={(e) =>
 						setRegisterData({
 							...registerData,
@@ -64,6 +73,7 @@ const RegisterPage = () => {
 					required
 					type="password"
 					placeholder="Password"
+					value={registerData.password}
 					onChange={(e) =>
 						setRegisterData({
 							...registerData,
@@ -79,6 +89,11 @@ const RegisterPage = () => {
 				{userRegisterError && (
 					<p className="text-red-500 text-sm text-center">
 						{userRegisterError}
+					</p>
+				)}
+				{userRegisterSucces && (
+					<p className="text-green-500 text-sm text-center">
+						you have successfully registered!
 					</p>
 				)}
 

@@ -1,7 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 import $axios from "../../api/axios";
-import type { IRegisterData, IUser } from "../../types";
+import type {
+	IAuthResponse,
+	ILoginData,
+	IRegisterData,
+	IUser,
+} from "../../types";
 
 export const registerUser = createAsyncThunk<
 	IUser,
@@ -14,8 +19,27 @@ export const registerUser = createAsyncThunk<
 	} catch (err) {
 		const error = err as AxiosError<{ message: string }>;
 
-		const message = error.response!.data.message;
+		const message = error.response?.data?.message || "Register error!";
 
-		return message || "Register error!";
+		throw new Error(message);
+	}
+});
+
+export const loginUser = createAsyncThunk<
+	IAuthResponse,
+	ILoginData,
+	{ rejectValue: string }
+>("user/login", async (data) => {
+	try {
+		const response = await $axios.post("/auth/login", data);
+		console.log(response.data);
+
+		return response.data.user;
+	} catch (err) {
+		const error = err as AxiosError<{ message: string }>;
+
+		const message = error.response?.data?.message || "Login error!";
+
+		throw new Error(message);
 	}
 });
