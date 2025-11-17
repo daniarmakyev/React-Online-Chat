@@ -82,7 +82,7 @@ const RegisterPage = () => {
 					}
 				/>
 
-				<button type="submit" className="border p-2 rounded">
+				<button type="submit" className="border p-2 rounded cursor-pointer">
 					{userRegisterLoading ? "Loading..." : "Sign up"}
 				</button>
 

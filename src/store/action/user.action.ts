@@ -26,20 +26,21 @@ export const registerUser = createAsyncThunk<
 });
 
 export const loginUser = createAsyncThunk<
-	IAuthResponse,
-	ILoginData,
+	IUser,
+	{ data: ILoginData; navigate: (path: string) => void },
 	{ rejectValue: string }
->("user/login", async (data) => {
+>("user/login", async ({ data, navigate }) => {
 	try {
-		const response = await $axios.post("/auth/login", data);
-		console.log(response.data);
+		const response = await $axios.post<IAuthResponse>("/auth/login", data);
+
+		localStorage.setItem("token", response.data.token);
+
+		navigate("/channels");
 
 		return response.data.user;
 	} catch (err) {
 		const error = err as AxiosError<{ message: string }>;
-
 		const message = error.response?.data?.message || "Login error!";
-
 		throw new Error(message);
 	}
 });
