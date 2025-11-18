@@ -1,7 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 import $axios from "../../api/axios";
-import type { IChannel, IMessage } from "../../types";
+import type {
+	IChannel,
+	IGetChannelParticipantsResponse,
+	IMessage,
+} from "../../types";
 
 export const getChannelList = createAsyncThunk<IChannel[], void>(
 	"channel/getList",
@@ -110,7 +114,7 @@ export const getChannelMessages = createAsyncThunk<IMessage[], string>(
 	async (channelId) => {
 		try {
 			const response = await $axios.get(`/channel/${channelId}/messages`);
-			return response.data;
+			return response.data.messages;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
 			const message =
@@ -119,3 +123,20 @@ export const getChannelMessages = createAsyncThunk<IMessage[], string>(
 		}
 	},
 );
+
+export const getChannelParticipant = createAsyncThunk<
+	IGetChannelParticipantsResponse,
+	string
+>("channel/getParticipants", async (channelId) => {
+	try {
+		const response = await $axios.get<IGetChannelParticipantsResponse>(
+			`/channel/${channelId}/participants`,
+		);
+		return response.data;
+	} catch (err) {
+		const error = err as AxiosError<{ message: string }>;
+		const message =
+			error.response?.data?.message || "Failed to get participants!";
+		throw new Error(message);
+	}
+});

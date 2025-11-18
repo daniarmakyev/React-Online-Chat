@@ -45,3 +45,8 @@ export interface ISendMessageData {
 	channelId: string;
 	text: string;
 }
+
+export interface IGetChannelParticipantsResponse {
+	participants: IUser[];
+	owner: IUser;
+}

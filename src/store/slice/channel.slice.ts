@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { IChannel, IMessage } from "../../types";
+import type {
+	IChannel,
+	IGetChannelParticipantsResponse,
+	IMessage,
+} from "../../types";
 import {
 	getChannelList,
 	createChannel,
@@ -8,6 +12,7 @@ import {
 	deleteChannel,
 	removeParticipant,
 	getChannelMessages,
+	getChannelParticipant,
 } from "../action/channel.action";
 
 interface IChannelState {
@@ -38,6 +43,10 @@ interface IChannelState {
 	channelMessages: IMessage[];
 	channelMessagesLoading: boolean;
 	channelMessagesError: string;
+
+	channelParticipant: IGetChannelParticipantsResponse | null;
+	channelParticipantLoading: boolean;
+	channelParticipantError: string;
 }
 
 const INIT_STATE: IChannelState = {
@@ -68,6 +77,10 @@ const INIT_STATE: IChannelState = {
 	channelMessages: [],
 	channelMessagesLoading: false,
 	channelMessagesError: "",
+
+	channelParticipant: null,
+	channelParticipantLoading: false,
+	channelParticipantError: "",
 };
 
 const channelSlice = createSlice({
@@ -176,6 +189,18 @@ const channelSlice = createSlice({
 			.addCase(getChannelMessages.rejected, (state, action) => {
 				state.channelMessagesLoading = false;
 				state.channelMessagesError = action.error.message!;
+			})
+			.addCase(getChannelParticipant.pending, (state) => {
+				state.channelParticipantLoading = true;
+				state.channelParticipantError = "";
+			})
+			.addCase(getChannelParticipant.fulfilled, (state, { payload }) => {
+				state.channelParticipant = payload;
+				state.channelParticipantLoading = false;
+			})
+			.addCase(getChannelParticipant.rejected, (state, action) => {
+				state.channelParticipantLoading = false;
+				state.channelParticipantError = action.error.message!;
 			});
 	},
 });
