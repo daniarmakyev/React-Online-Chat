@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
-import ChannelLists from "../pages/ChannelsList";
+import ChannelPage from "../pages/ChannelsPage";
 
 export const router = createBrowserRouter([
 	{
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
 		children: [
 			{ path: "/", element: <LoginPage /> },
 			{ path: "/signup", element: <RegisterPage /> },
-			{ path: "/channels", element: <ChannelLists /> },
+			{ path: "/channels", element: <ChannelPage /> },
 		],
 	},
 ]);

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useState } from "react";
 import type { ILoginData } from "../types";
-import LoginInput from "../components/LoginInput";
+import LoginInput from "../components/ui/LoginInput";
 import { loginUser } from "../store/action/user.action";
 
 const LoginPage = () => {

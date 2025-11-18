@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useState } from "react";
 import type { IRegisterData } from "../types";
-import LoginInput from "../components/LoginInput";
+import LoginInput from "../components/ui/LoginInput";
 import { registerUser } from "../store/action/user.action";
 
 const RegisterPage = () => {
