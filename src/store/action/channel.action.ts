@@ -20,45 +20,55 @@ export const getChannelList = createAsyncThunk<IChannel[], void>(
 
 export const createChannel = createAsyncThunk<IChannel, { name: string }>(
 	"channel/create",
-	async (data) => {
+
+	async (data, thunkAPI) => {
 		try {
 			const response = await $axios.post("/channel/create", data);
+
+			thunkAPI.dispatch(getChannelList());
+
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
 			const message =
 				error.response?.data?.message || "Failed to create channel!";
-			throw new Error(message);
+			return thunkAPI.rejectWithValue(message);
 		}
 	},
 );
 
 export const joinChannel = createAsyncThunk<IChannel, string>(
 	"channel/join",
-	async (channelId) => {
+	async (channelId, thunkAPI) => {
 		try {
 			const response = await $axios.post(`/channel/${channelId}/join`);
+
+			thunkAPI.dispatch(getChannelList());
+
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
 			const message =
 				error.response?.data?.message || "Failed to join channel!";
-			throw new Error(message);
+			return thunkAPI.rejectWithValue(message);
 		}
 	},
 );
 
 export const leaveChannel = createAsyncThunk<{ message: string }, string>(
 	"channel/leave",
-	async (channelId) => {
+	async (channelId, thunkAPI) => {
 		try {
 			const response = await $axios.post(`/channel/${channelId}/leave`);
+
+			thunkAPI.dispatch(getChannelList());
+
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
 			const message =
 				error.response?.data?.message || "Failed to leave channel!";
-			throw new Error(message);
+			return thunkAPI.rejectWithValue(message);
 		}
 	},
 );

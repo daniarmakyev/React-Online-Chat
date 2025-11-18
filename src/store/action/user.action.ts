@@ -32,7 +32,7 @@ export const loginUser = createAsyncThunk<
 		const response = await $axios.post<IAuthResponse>("/auth/login", data);
 
 		localStorage.setItem("token", response.data.token);
-		localStorage.setItem("id", response.data.user.id);
+		localStorage.setItem("id", response.data.user.id!);
 		navigate("/channels");
 
 		return response.data.user;

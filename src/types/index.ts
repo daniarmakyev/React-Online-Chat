@@ -1,5 +1,6 @@
 export interface IUser {
-	id: string;
+	_id: string;
+	id?: string;
 	username: string;
 	email: string;
 }
@@ -23,8 +24,8 @@ export interface IAuthResponse {
 export interface IChannel {
 	_id: string;
 	name: string;
-	owner: IUser | string;
-	participants: IUser[] | string[];
+	owner: IUser;
+	participants: IUser[];
 	createdAt: string;
 }
 
