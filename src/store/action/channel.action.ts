@@ -7,8 +7,8 @@ export const getChannelList = createAsyncThunk<IChannel[], void>(
 	"channel/getList",
 	async () => {
 		try {
-			const response = await $axios.get("/channels/list");
-			return response.data;
+			const response = await $axios.get("/channel/list");
+			return response.data.channels;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
 			const message =
@@ -22,7 +22,7 @@ export const createChannel = createAsyncThunk<IChannel, { name: string }>(
 	"channel/create",
 	async (data) => {
 		try {
-			const response = await $axios.post("/channels/create", data);
+			const response = await $axios.post("/channel/create", data);
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
@@ -37,7 +37,7 @@ export const joinChannel = createAsyncThunk<IChannel, string>(
 	"channel/join",
 	async (channelId) => {
 		try {
-			const response = await $axios.post(`/channels/${channelId}/join`);
+			const response = await $axios.post(`/channel/${channelId}/join`);
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
@@ -52,7 +52,7 @@ export const leaveChannel = createAsyncThunk<{ message: string }, string>(
 	"channel/leave",
 	async (channelId) => {
 		try {
-			const response = await $axios.post(`/channels/${channelId}/leave`);
+			const response = await $axios.post(`/channel/${channelId}/leave`);
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
@@ -67,7 +67,7 @@ export const deleteChannel = createAsyncThunk<{ message: string }, string>(
 	"channel/delete",
 	async (channelId) => {
 		try {
-			const response = await $axios.delete(`/channels/${channelId}`);
+			const response = await $axios.delete(`/channel/${channelId}`);
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
@@ -84,7 +84,7 @@ export const removeParticipant = createAsyncThunk<
 >("channel/removeParticipant", async ({ channelId, participantId }) => {
 	try {
 		const response = await $axios.delete(
-			`/channels/${channelId}/participants/${participantId}`,
+			`/channel/${channelId}/participants/${participantId}`,
 		);
 		return response.data;
 	} catch (err) {
@@ -99,7 +99,7 @@ export const getChannelMessages = createAsyncThunk<IMessage[], string>(
 	"channel/getMessages",
 	async (channelId) => {
 		try {
-			const response = await $axios.get(`/channels/${channelId}/messages`);
+			const response = await $axios.get(`/channel/${channelId}/messages`);
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;

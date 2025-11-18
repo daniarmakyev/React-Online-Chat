@@ -8,33 +8,31 @@ import type {
 	IUser,
 } from "../../types";
 
-export const registerUser = createAsyncThunk<
-	IUser,
-	IRegisterData,
-	{ rejectValue: string }
->("user/register", async (data) => {
-	try {
-		const response = await $axios.post("/auth/register", data);
-		return response.data.user;
-	} catch (err) {
-		const error = err as AxiosError<{ message: string }>;
+export const registerUser = createAsyncThunk<IUser, IRegisterData>(
+	"user/register",
+	async (data) => {
+		try {
+			const response = await $axios.post("/auth/register", data);
+			return response.data.user;
+		} catch (err) {
+			const error = err as AxiosError<{ message: string }>;
 
-		const message = error.response?.data?.message || "Register error!";
+			const message = error.response?.data?.message || "Register error!";
 
-		throw new Error(message);
-	}
-});
+			throw new Error(message);
+		}
+	},
+);
 
 export const loginUser = createAsyncThunk<
 	IUser,
-	{ data: ILoginData; navigate: (path: string) => void },
-	{ rejectValue: string }
+	{ data: ILoginData; navigate: (path: string) => void }
 >("user/login", async ({ data, navigate }) => {
 	try {
 		const response = await $axios.post<IAuthResponse>("/auth/login", data);
 
 		localStorage.setItem("token", response.data.token);
-
+		localStorage.setItem("id", response.data.user.id);
 		navigate("/channels");
 
 		return response.data.user;
