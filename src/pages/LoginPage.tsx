@@ -2,8 +2,41 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useState } from "react";
 import type { ILoginData } from "../types";
-import LoginInput from "../components/ui/LoginInput";
 import { loginUser } from "../store/action/user.action";
+import Loader from "../components/ui/Loader";
+import { LoginInput } from "../components/ui/LoginInput";
+
+const EmailIcon = () => (
+	<svg
+		className="w-5 h-5"
+		fill="none"
+		stroke="currentColor"
+		viewBox="0 0 24 24"
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth={2}
+			d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+		/>
+	</svg>
+);
+
+const LockIcon = () => (
+	<svg
+		className="w-5 h-5"
+		fill="none"
+		stroke="currentColor"
+		viewBox="0 0 24 24"
+	>
+		<path
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth={2}
+			d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+		/>
+	</svg>
+);
 
 const LoginPage = () => {
 	const [loginData, setLoginData] = useState<ILoginData>({
@@ -29,55 +62,81 @@ const LoginPage = () => {
 	}
 
 	return (
-		<div className="bg-zinc-800 h-screen text-white flex justify-center items-center">
-			<form
-				className="bg-white p-6 rounded-xl flex flex-col gap-4 w-full max-w-[320px] text-black"
-				onSubmit={(e) => {
-					e.preventDefault();
-					onSubmit();
-				}}
-			>
-				<LoginInput
-					required
-					type="email"
-					placeholder="Email"
-					value={loginData.email}
-					onChange={(e) =>
-						setLoginData({
-							...loginData,
-							email: e.target.value,
-						})
-					}
-				/>
+		<div className="bg-linear-to-br from-zinc-900 via-zinc-800 to-zinc-900 min-h-screen text-white flex justify-center items-center p-4">
+			<div className="w-full max-w-md">
+				<div className="text-center mb-8 animate-fade-in">
+					<div className="w-16 h-16 bg-linear-to-br from-pink-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-pink-500/50">
+						<svg
+							className="w-8 h-8 text-white"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+							/>
+						</svg>
+					</div>
+					<h1 className="text-3xl font-bold bg-linear-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+						Welcome Back
+					</h1>
+					<p className="text-gray-400 mt-2">
+						Sign in to continue to your account
+					</p>
+				</div>
 
-				<LoginInput
-					required
-					type="password"
-					placeholder="Password"
-					value={loginData.password}
-					onChange={(e) =>
-						setLoginData({
-							...loginData,
-							password: e.target.value,
-						})
-					}
-				/>
+				{/* Form Card */}
+				<div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700/50 p-8 rounded-2xl shadow-2xl space-y-6">
+					<LoginInput
+						required
+						type="email"
+						placeholder="Email"
+						value={loginData.email}
+						onChange={(e) =>
+							setLoginData({ ...loginData, email: e.target.value })
+						}
+						icon={<EmailIcon />}
+					/>
 
-				<button type="submit" className="border p-2 rounded cursor-pointer">
-					{userLoginLoading ? "Loading..." : "Sign in"}
-				</button>
+					<LoginInput
+						required
+						type="password"
+						placeholder="Password"
+						value={loginData.password}
+						onChange={(e) =>
+							setLoginData({ ...loginData, password: e.target.value })
+						}
+						icon={<LockIcon />}
+					/>
 
-				{userLoginError && (
-					<p className="text-red-500 text-sm text-center">{userLoginError}</p>
-				)}
+					<button
+						onClick={(e) => {
+							e.preventDefault();
+							onSubmit();
+						}}
+						disabled={userLoginLoading}
+						className="w-full bg-linear-to-r from-pink-500 to-purple-600 text-white font-semibold p-3 rounded-lg hover:shadow-lg hover:shadow-pink-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+					>
+						{userLoginLoading ? <Loader /> : "Sign in"}
+					</button>
 
-				<span>
-					Don't have account?{" "}
-					<Link to={"/signup"}>
-						<strong>Sign up!</strong>
-					</Link>
-				</span>
-			</form>
+					{userLoginError && (
+						<div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg text-sm text-center animate-shake">
+							{userLoginError}
+						</div>
+					)}
+
+					<div className="text-center text-gray-400 text-sm">
+						Don't have an account?{" "}
+						<span className="text-pink-500 font-semibold hover:text-pink-400 transition-colors cursor-pointer">
+							<Link to="/signup">Sign up</Link>
+						</span>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 };

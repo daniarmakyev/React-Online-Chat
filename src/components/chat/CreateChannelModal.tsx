@@ -54,14 +54,14 @@ const CreateChannelModal = ({ isOpen, onClose }: CreateChannelModalProps) => {
 							value={channelName}
 							onChange={(e) => setChannelName(e.target.value)}
 							placeholder="Enter channel name..."
-							className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-purple-400 transition-colors"
+							className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline focus:outline-gray-500 transition-colors"
 							disabled={createChannelLoading}
 							autoFocus
 						/>
 					</div>
 
 					{createChannelError && (
-						<div className="mb-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+						<div className="mb-4 p-3 bg-red-50 border-2 border-red-200 rounded-lg">
 							<p className="text-red-600 text-sm font-medium">
 								{createChannelError}
 							</p>
@@ -73,14 +73,14 @@ const CreateChannelModal = ({ isOpen, onClose }: CreateChannelModalProps) => {
 							type="button"
 							onClick={handleClose}
 							disabled={createChannelLoading}
-							className="flex-1 px-4 py-3 border-2 border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							className="flex-1 px-3 py-2 border-2 border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 						>
 							Cancel
 						</button>
 						<button
 							type="submit"
 							disabled={createChannelLoading || !channelName.trim()}
-							className="flex-1 px-4 py-3 bg-linear-to-r  bg-pink-500 text-white font-semibold rounded-xl  transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+							className="flex-1 px-3 py-2  bg-emerald-500 text-white font-semibold rounded-lg  transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
 						>
 							{createChannelLoading ? "Creating..." : "Create"}
 						</button>

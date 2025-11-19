@@ -6,6 +6,10 @@ import type { IMessage } from "../../types";
 import { socketService } from "../../context/socket.service";
 import { useSocket } from "../../context/soket";
 import ChannelMembers from "./ChannelMembers";
+import NoMessage from "../../assets/NoMessage.svg?react";
+import Members from "../../assets/Members.svg?react";
+import Send from "../../assets/Send.svg?react";
+import Back from "../../assets/Back.svg?react";
 
 const ChatWindow = () => {
 	const dispatch = useAppDispatch();
@@ -18,6 +22,7 @@ const ChatWindow = () => {
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const navigate = useNavigate();
+
 	useEffect(() => {
 		setMessages(channelMessages);
 	}, [channelMessages]);
@@ -46,7 +51,7 @@ const ChatWindow = () => {
 	}, [id, dispatch, isConnected]);
 
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
 
 	const handleSendMessage = (e: React.FormEvent) => {
@@ -59,78 +64,137 @@ const ChatWindow = () => {
 	};
 
 	return (
-		<div className="flex flex-col h-screen">
-			<div className="p-2 bg-gray-100 border-b flex justify-between">
-				<button
-					className="cursor-pointer p-2 bg-blue-500 text-white rounded-lg"
-					onClick={() => {
-						navigate("/channels");
-					}}
-				>
-					Menu
-				</button>
-				<h2 className="font-semibold text-2xl">{channelName && channelName}</h2>
-				<button
-					className="cursor-pointer p-2 bg-blue-500 text-white rounded-lg"
-					onClick={() => {
-						setIsOpen(!isOpen);
-					}}
-				>
-					Members
-				</button>
-			</div>
-
-			<div className="flex-1 overflow-y-auto flex mb-3">
-				<ul
-					className={`flex flex-col gap-y-1 p-5  justify-between w-full ${
-						isOpen && "w-[80%] mr-[20%]"
-					}`}
-				>
-					{messages.map((message, index) => {
-						const isOwnMessage = message.sender._id === idUser;
-						return (
-							<li
-								key={message._id || index}
-								className={`max-w-[400px] w-fit p-2 rounded-xl text-white ${
-									isOwnMessage ? "bg-blue-500 self-end" : "bg-gray-500"
-								}`}
-							>
-								<section className="text-[12px] flex gap-2">
-									<h6 className="font-bold">{message.sender.username}</h6>
-									<span className="font-light">
-										{new Date(message.createdAt).toLocaleTimeString([], {
-											hour: "2-digit",
-											minute: "2-digit",
-										})}
-									</span>
-								</section>
-								<span>{message.text}</span>
-							</li>
-						);
-					})}
-					<div ref={messagesEndRef} />
-				</ul>
-				{isOpen && <ChannelMembers id={id!} />}
-			</div>
-
-			<div className="p-4 border-t bg-white">
-				<form onSubmit={handleSendMessage} className="flex gap-2">
-					<input
-						type="text"
-						value={newMessage}
-						onChange={(e) => setNewMessage(e.target.value)}
-						placeholder="Type a message..."
-						className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						disabled={!isConnected}
-					/>
+		<div className="flex flex-col h-screen bg-gray-50">
+			<div className="p-4 bg-white border-b border-gray-200 shadow-sm">
+				<div className="flex items-center justify-between max-w-6xl mx-auto">
 					<button
-						type="submit"
-						disabled={!isConnected || !newMessage.trim()}
-						className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+						className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
+						onClick={() => navigate("/channels")}
 					>
-						Send
+						<Back />
+						Back to Menu
 					</button>
-				</form>
+
+					<div className="text-center">
+						<h2 className="font-bold text-xl text-gray-800">{channelName}</h2>
+						<div className="flex items-center gap-2 mt-1 justify-center">
+							<div
+								className={`w-2 h-2 rounded-full ${
+									isConnected ? "bg-green-500" : "bg-red-500"
+								}`}
+							></div>
+							<span className="text-sm text-gray-600">
+								{isConnected ? "Connected" : "Disconnected"}
+							</span>
+						</div>
+					</div>
+
+					<button
+						className="flex items-center gap-2 px-4 py-2 text-white bg-linear-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md"
+						onClick={() => setIsOpen(!isOpen)}
+					>
+						<Members />
+						Members
+					</button>
+				</div>
+			</div>
+
+			<div className="flex-1 flex overflow-hidden">
+				<div className={`flex-1 flex flex-col transition-all duration-300`}>
+					<div className="flex-1 overflow-y-auto px-4 py-6">
+						<div className=" mx-auto">
+							{messages.length === 0 ? (
+								<div className="text-center text-gray-500 mt-8">
+									<NoMessage />
+									<p className="mt-4 text-lg">No messages yet</p>
+								</div>
+							) : (
+								<div className="space-y-4">
+									{messages.map((message, index) => {
+										const isOwnMessage = message.sender._id === idUser;
+										return (
+											<div
+												key={message._id || index}
+												className={`flex ${
+													isOwnMessage ? "justify-end" : "justify-start"
+												}`}
+											>
+												<div
+													className={`max-w-md rounded-2xl px-4 py-3 shadow-sm ${
+														isOwnMessage
+															? "  bg-blue-600 text-white rounded-br-none"
+															: "bg-white text-gray-800 border border-gray-100 rounded-bl-none shadow-sm"
+													}`}
+												>
+													{
+														<div className="flex items-center gap-2 mb-1 justify-between">
+															<span
+																className={`font-semibold text-sm text-gray-700 ${
+																	isOwnMessage &&
+																	"  bg-blue-600 text-white rounded-br-none"
+																}`}
+															>
+																{message.sender.username}
+															</span>
+															<div
+																className={`text-xs  ${
+																	isOwnMessage
+																		? "text-blue-100"
+																		: "text-gray-500"
+																}`}
+															>
+																{new Date(message.createdAt).toLocaleTimeString(
+																	[],
+																	{
+																		hour: "2-digit",
+																		minute: "2-digit",
+																	},
+																)}
+															</div>
+														</div>
+													}
+													<div className="wrap-break-word">{message.text}</div>
+												</div>
+											</div>
+										);
+									})}
+									<div ref={messagesEndRef} />
+								</div>
+							)}
+						</div>
+					</div>
+
+					<div className="border-t border-gray-200 bg-white p-4 shadow-lg">
+						<form onSubmit={handleSendMessage} className="max-w-4xl mx-auto">
+							<div className="flex gap-3">
+								<div className="flex-1 relative">
+									<input
+										type="text"
+										value={newMessage}
+										onChange={(e) => setNewMessage(e.target.value)}
+										placeholder="Type your message..."
+										className="w-full px-4 py-3  bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+										disabled={!isConnected}
+									/>
+								</div>
+								<button
+									type="submit"
+									disabled={!isConnected || !newMessage.trim()}
+									className="px-6 py-3 bg-linear-to-r  bg-blue-600 text-white rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform   flex items-center gap-2"
+								>
+									<Send />
+									Send
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				{isOpen && (
+					<div className="fixed inset-y-0 right-0 w-80 bg-white border-l border-gray-200 shadow-xl lg:relative lg:shadow-none z-10 transform transition-transform duration-300 ease-in-out">
+						<ChannelMembers id={id!} />
+					</div>
+				)}
 			</div>
 		</div>
 	);

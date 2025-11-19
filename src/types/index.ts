@@ -59,3 +59,23 @@ export interface IRemoveParticipantData {
 	channelId: string;
 	participantId: string;
 }
+
+export interface ILoginData {
+	email: string;
+	password: string;
+}
+
+export interface IRegisterData {
+	email: string;
+	password: string;
+	username: string;
+}
+
+export interface LoginInputProps {
+	required?: boolean;
+	placeholder?: string;
+	value?: string;
+	type: "text" | "email" | "password";
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	icon?: React.ReactNode;
+}

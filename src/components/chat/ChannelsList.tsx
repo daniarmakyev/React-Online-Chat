@@ -11,7 +11,7 @@ import CreateChannelModal from "./CreateChannelModal";
 import ChannelCard from "./ChannelCard";
 import Loader from "../ui/Loader";
 import UserSearch from "./UserSearch";
-
+import NoChannels from "../../assets/NoChannels.svg?react";
 const ChannelsList = () => {
 	const dispatch = useAppDispatch();
 	const {
@@ -44,7 +44,7 @@ const ChannelsList = () => {
 					</div>
 					<button
 						onClick={() => setIsCreateModalOpen(true)}
-						className="px-6 py-3  bg-pink-500 text-white font-semibold rounded-xl  transition-all shadow-md hover:shadow-lg"
+						className="px-4 py-2  bg-emerald-500 text-white font-semibold rounded-lg  transition-all shadow-md hover:shadow-lg"
 					>
 						+ Create Channel
 					</button>
@@ -57,19 +57,7 @@ const ChannelsList = () => {
 						</div>
 					) : channelList.length === 0 ? (
 						<div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-							<svg
-								className="w-16 h-16 text-slate-300 mx-auto mb-4"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-								/>
-							</svg>
+							<NoChannels />
 							<p className="text-slate-600 text-lg">No channels</p>
 						</div>
 					) : (

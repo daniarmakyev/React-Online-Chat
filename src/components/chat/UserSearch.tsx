@@ -37,15 +37,14 @@ const UserSearch = () => {
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 				placeholder="Search users"
-				className="w-full px-4 py-2  bg-white rounded-md shadow-[0_0_10px_5px_rgba(0,0,0,0.1)] transition-all p-6 focus:outline-none focus:ring-2 "
+				className=" w-full px-4 py-2 bg-white rounded-md shadow-[0_0_10px_5px_rgba(0,0,0,0.1)]  focus:outline focus:outline-gray-500"
 			/>
-
 			{searchLoading && <Loader />}
 
 			{showDropdown && (
-				<div className="absolute z-10 w-full mt-1 bg-white   rounded-lg shadow-lg max-h-60 overflow-y-auto">
+				<ul className="absolute z-10 w-full mt-1 bg-white   rounded-lg shadow-lg max-h-60 overflow-y-auto">
 					{searchResults.map((user) => (
-						<button
+						<li
 							key={user._id}
 							className="w-full px-4 py-2 text-left  flex flex-col"
 						>
@@ -57,9 +56,9 @@ const UserSearch = () => {
 								{user.username} {userId === user._id && " (Вы)"}
 							</span>
 							<span className="text-sm text-gray-500">{user.email}</span>
-						</button>
+						</li>
 					))}
-				</div>
+				</ul>
 			)}
 
 			{searchError && (
