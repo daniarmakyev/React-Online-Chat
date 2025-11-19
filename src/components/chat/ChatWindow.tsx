@@ -9,7 +9,7 @@ import ChannelMembers from "./ChannelMembers";
 
 const ChatWindow = () => {
 	const dispatch = useAppDispatch();
-	const { id } = useParams();
+	const { id, channelName } = useParams();
 	const { channelMessages } = useAppSelector((state) => state.channel);
 	const { isConnected } = useSocket();
 	const idUser = localStorage.getItem("id");
@@ -69,7 +69,7 @@ const ChatWindow = () => {
 				>
 					Menu
 				</button>
-				<h2>{}</h2>
+				<h2 className="font-semibold text-2xl">{channelName && channelName}</h2>
 				<button
 					className="cursor-pointer p-2 bg-blue-500 text-white rounded-lg"
 					onClick={() => {

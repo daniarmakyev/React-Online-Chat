@@ -79,9 +79,10 @@ export const leaveChannel = createAsyncThunk<{ message: string }, string>(
 
 export const deleteChannel = createAsyncThunk<{ message: string }, string>(
 	"channel/delete",
-	async (channelId) => {
+	async (channelId, thunkAPI) => {
 		try {
 			const response = await $axios.delete(`/channel/${channelId}`);
+			thunkAPI.dispatch(getChannelList());
 			return response.data;
 		} catch (err) {
 			const error = err as AxiosError<{ message: string }>;
@@ -95,19 +96,25 @@ export const deleteChannel = createAsyncThunk<{ message: string }, string>(
 export const removeParticipant = createAsyncThunk<
 	{ message: string },
 	{ channelId: string; participantId: string }
->("channel/removeParticipant", async ({ channelId, participantId }) => {
-	try {
-		const response = await $axios.delete(
-			`/channel/${channelId}/participants/${participantId}`,
-		);
-		return response.data;
-	} catch (err) {
-		const error = err as AxiosError<{ message: string }>;
-		const message =
-			error.response?.data?.message || "Failed to remove participant!";
-		throw new Error(message);
-	}
-});
+>(
+	"channel/removeParticipant",
+	async ({ channelId, participantId }, thunkAPI) => {
+		try {
+			const response = await $axios.delete(
+				`/channel/${channelId}/participants/${participantId}`,
+			);
+
+			thunkAPI.dispatch(getChannelParticipant(channelId));
+
+			return response.data;
+		} catch (err) {
+			const error = err as AxiosError<{ message: string }>;
+			const message =
+				error.response?.data?.message || "Failed to remove participant!";
+			return thunkAPI.rejectWithValue(message);
+		}
+	},
+);
 
 export const getChannelMessages = createAsyncThunk<IMessage[], string>(
 	"channel/getMessages",

@@ -50,3 +50,12 @@ export interface IGetChannelParticipantsResponse {
 	participants: IUser[];
 	owner: IUser;
 }
+
+export interface IUserSearchResponse {
+	users: IUser[];
+}
+
+export interface IRemoveParticipantData {
+	channelId: string;
+	participantId: string;
+}

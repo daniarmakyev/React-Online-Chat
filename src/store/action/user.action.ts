@@ -6,6 +6,7 @@ import type {
 	ILoginData,
 	IRegisterData,
 	IUser,
+	IUserSearchResponse,
 } from "../../types";
 
 export const registerUser = createAsyncThunk<IUser, IRegisterData>(
@@ -42,3 +43,19 @@ export const loginUser = createAsyncThunk<
 		throw new Error(message);
 	}
 });
+
+export const searchUsers = createAsyncThunk<IUser[], string>(
+	"user/search",
+	async (query) => {
+		try {
+			const response = await $axios.get<IUserSearchResponse>(
+				`/users/search?q=${query}`,
+			);
+			return response.data.users;
+		} catch (err) {
+			const error = err as AxiosError<{ message: string }>;
+			const message = error.response?.data?.message || "Search users error!";
+			throw new Error(message);
+		}
+	},
+);
