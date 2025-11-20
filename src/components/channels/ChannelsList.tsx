@@ -7,11 +7,12 @@ import {
 	deleteChannel,
 } from "../../store/action/channel.action";
 import { useNavigate } from "react-router-dom";
-import CreateChannelModal from "./modals/CreateChannelModal";
+
 import ChannelsHeader from "./ChannelsHeader";
 import ChannelsContent from "./ChannelsContent";
 
 import UserSearch from "./UserSearch";
+import CreateChannelModal from "./modals/CreateChannelModal";
 
 const ChannelsList = () => {
 	const dispatch = useAppDispatch();

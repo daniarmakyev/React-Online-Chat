@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
-import FormField from "./FormField";
 import FormActions from "./FormActions";
+import FormField from "./FormField";
 
 interface ChannelFormProps {
 	channelName: string;
