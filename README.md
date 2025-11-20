@@ -1,73 +1,128 @@
-# React + TypeScript + Vite
+# Real-Time Chat Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time chat application built with React, TypeScript, Redux Toolkit, Socket.IO.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Authentication
 
-## React Compiler
+- User registration with email and password
+- Secure login system with JWT tokens
+- Protected routes and API endpoints
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Channel Management
 
-## Expanding the ESLint configuration
+- Create public channels
+- Join/leave channels
+- Delete channels (owner only)
+- View channel members
+- Remove members (owner only)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Real-Time Messaging
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Instant message delivery via WebSocket
+- Message history persistence
+- Online/offline status indicators
+- Auto-scroll to latest messages
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### User Management
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Search users by username or email
+- View user profiles
+- Real-time user presence
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Redux Toolkit** - State management
+- **React Router v6** - Routing
+- **Socket.IO Client** - WebSocket client
+- **Tailwind CSS** - Styling
+- **Vite** - Build tool
+
+### Backend
+
+- **Node.js** - Runtime
+- **Express** - Web framework
+- **Socket.IO** - WebSocket server
+- **MongoDB** - Database
+- **JWT** - Authentication
+
+---
+
+## Environment Variables
+
+### Frontend (.env)
+
+```env
+VITE_API_URL=http://localhost:3000
+VITE_SOCKET_URL=http://localhost:3012
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Backend (.env)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+PORT=3000
+SOCKET_PORT=3012
+MONGODB_URI=mongodb://localhost:27017/chat-app
+JWT_SECRET=your_jwt_secret_key
 ```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+```
+POST /auth/register
+Body: { username, email, password }
+Response: { user: IUser }
+
+POST /auth/login
+Body: { email, password }
+Response: { token, user: IUser }
+```
+
+### Channels
+
+```
+GET /channel/list
+Response: { channels: IChannel[] }
+
+POST /channel/create
+Body: { name: string }
+Response: IChannel
+
+POST /channel/:id/join
+Response: IChannel
+
+POST /channel/:id/leave
+Response: { message: string }
+
+DELETE /channel/:id
+Response: { message: string }
+
+GET /channel/:id/messages
+Response: { messages: IMessage[] }
+
+GET /channel/:id/participants
+Response: { participants: IUser[], owner: IUser }
+
+DELETE /channel/:id/participants/:participantId
+Response: { message: string }
+```
+
+### Users
+
+```
+GET /users/search?q=query
+Response: { users: IUser[] }
+```
+
+---
