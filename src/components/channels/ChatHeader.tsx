@@ -27,7 +27,9 @@ const ChatHeader = ({
 				</button>
 
 				<div className="text-center">
-					<h2 className="font-bold text-xl text-gray-800">{channelName}</h2>
+					<h2 className="font-bold text-xl text-gray-800 wrap-break-word line-clamp-2 max-w-[800px]">
+						{channelName}
+					</h2>
 					<div className="flex items-center gap-2 mt-1 justify-center">
 						<div
 							className={`w-2 h-2 rounded-full ${
