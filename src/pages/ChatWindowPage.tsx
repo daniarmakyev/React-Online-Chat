@@ -1,27 +1,45 @@
 import { useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect, useRef, useState } from "react";
-import { getChannelMessages } from "../../store/action/channel.action";
-import type { IMessage } from "../../types";
-import { socketService } from "../../context/socket.service";
-import { useSocket } from "../../context/soket";
-import ChatHeader from "../channels/ChatHeader";
-import MessageList from "./messages/MessageList";
-import MessageInput from "./messages/MessageInput";
-import MembersSidebar from "./MembersSidebar";
+import { getChannelMessages } from "../store/action/channel.action";
+import type { IMessage } from "../types";
+import { socketService } from "../context/socket.service";
+import { useSocket } from "../context/soket";
+import ChatHeader from "../components/channels/ChatHeader";
+import MessageList from "../components/chat/messages/MessageList";
+import MessageInput from "../components/chat/messages/MessageInput";
+import MembersSidebar from "../components/chat/MembersSidebar";
+import Loader from "../components/ui/Loader";
 
-const ChatWindow = () => {
+const ChatWindowPage = () => {
 	const dispatch = useAppDispatch();
 	const { id, channelName } = useParams();
-	const { channelMessages } = useAppSelector((state) => state.channel);
+	const { channelMessages, channelMessagesLoading, channelMessagesError } =
+		useAppSelector((state) => state.channel);
 	const { isConnected } = useSocket();
 	const idUser = localStorage.getItem("id");
 	const [messages, setMessages] = useState<IMessage[]>([]);
+
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		setMessages(channelMessages);
+		if (!isConnected) {
+			const hasReloaded = sessionStorage.getItem("hasReloaded");
+
+			if (!hasReloaded) {
+				sessionStorage.setItem("hasReloaded", "true");
+				window.location.reload();
+			}
+		}
+	}, [isConnected]);
+
+	useEffect(() => {
+		if (channelMessages && channelMessages.length > 0) {
+			console.log("Setting messages from Redux:", channelMessages.length);
+			// eslint-disable-next-line react-hooks/set-state-in-effect
+			setMessages(channelMessages);
+		}
 	}, [channelMessages]);
 
 	useEffect(() => {
@@ -72,9 +90,17 @@ const ChatWindow = () => {
 			<div className="flex-1 flex overflow-hidden">
 				<div className="flex-1 flex flex-col transition-all duration-300">
 					<div className="flex-1 overflow-y-auto px-4 py-6">
-						<div className="mx-auto">
-							<MessageList messages={messages} currentUserId={idUser} />
-						</div>
+						{channelMessagesLoading ? (
+							<Loader />
+						) : channelMessagesError ? (
+							<div className="text-red-500 text-center">
+								Error loading messages
+							</div>
+						) : (
+							<div className="mx-auto">
+								<MessageList messages={messages} currentUserId={idUser} />
+							</div>
+						)}
 						<div ref={messagesEndRef} />
 					</div>
 
@@ -90,4 +116,4 @@ const ChatWindow = () => {
 	);
 };
 
-export default ChatWindow;
+export default ChatWindowPage;
