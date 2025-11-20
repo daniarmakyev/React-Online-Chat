@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { searchUsers } from "../../store/action/user.action";
 import { clearSearchResults } from "../../store/slice/user.slice";
@@ -10,15 +9,19 @@ const UserSearch = () => {
 	const { searchResults, searchLoading, searchError } = useAppSelector(
 		(state) => state.user,
 	);
+
 	const userId = localStorage.getItem("id");
+
 	const [searchQuery, setSearchQuery] = useState("");
 	const [showDropdown, setShowDropdown] = useState(false);
+
+	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const performSearch = async () => {
 			if (searchQuery.trim().length < 1) {
 				dispatch(clearSearchResults());
-				setShowDropdown(true);
+				setShowDropdown(false);
 				return;
 			}
 
@@ -30,30 +33,52 @@ const UserSearch = () => {
 		return () => clearTimeout(debounceTimer);
 	}, [searchQuery, dispatch]);
 
+	useEffect(() => {
+		const handleClickOutside = (e: MouseEvent) => {
+			if (
+				wrapperRef.current &&
+				!wrapperRef.current.contains(e.target as Node)
+			) {
+				setShowDropdown(false);
+			}
+		};
+
+		document.addEventListener("click", handleClickOutside);
+		return () => document.removeEventListener("click", handleClickOutside);
+	}, []);
+
 	return (
-		<div className="relative mb-7">
+		<div className="relative mb-7" ref={wrapperRef}>
+			{showDropdown && (
+				<div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-20"></div>
+			)}
+
 			<input
 				type="text"
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
+				onFocus={() => {
+					if (searchResults.length > 0) setShowDropdown(true);
+				}}
 				placeholder="Search users"
-				className=" w-full px-4 py-2 bg-white rounded-md shadow-[0_0_10px_5px_rgba(0,0,0,0.1)]  focus:outline focus:outline-gray-500"
+				className="w-full px-4 py-2 bg-white rounded-md shadow-[0_0_20px_5px_rgba(255,255,255,0.6)] focus:outline focus:outline-gray-500 relative z-30"
 			/>
+
 			{searchLoading && <Loader />}
 
 			{showDropdown && (
-				<ul className="absolute z-10 w-full mt-1 bg-white   rounded-lg shadow-lg max-h-60 overflow-y-auto">
+				<ul className="absolute z-30 w-full mt-1 bg-white rounded-lg shadow-lg max-h-60 overflow-y-auto">
 					{searchResults.map((user) => (
 						<li
 							key={user._id}
-							className="w-full px-4 py-2 text-left  flex flex-col"
+							className="w-full px-4 py-2 text-left flex flex-col"
 						>
 							<span
 								className={`font-medium ${
 									userId === user._id && "text-blue-500"
 								}`}
 							>
-								{user.username} {userId === user._id && " (Вы)"}
+								{user.username} {userId === user._id && "(Вы)"}
 							</span>
 							<span className="text-sm text-gray-500">{user.email}</span>
 						</li>

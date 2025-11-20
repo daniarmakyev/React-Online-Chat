@@ -18,7 +18,7 @@ const ChannelCard = ({
 	onLeaveDelete,
 }: ChannelCardProps) => {
 	return (
-		<div className="bg-white rounded-md shadow-[0_0_10px_5px_rgba(0,0,0,0.1)] transition-all p-6">
+		<div className="bg-white rounded-md shadow-[0_0_10px_5px_rgba(255,255,255,0.6)] p-6 transition-all">
 			<div className="flex items-center justify-between">
 				<div className="flex-1">
 					<div className="flex items-center gap-3 mb-2">
@@ -44,7 +44,7 @@ const ChannelCard = ({
 						<button
 							onClick={() => onLeaveDelete(channel._id)}
 							disabled={isActionLoading}
-							className="px-5 py-1.5 border-2 border-red-400 text-red-500 font-semibold rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							className="px-5 py-1.5 border-2 border-red-400 text-red-500 font-semibold rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
 						>
 							{isOwner ? "Delete" : "Leave"}
 						</button>
