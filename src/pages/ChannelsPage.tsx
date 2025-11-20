@@ -1,4 +1,4 @@
-import ChannelsList from "../components/chat/ChannelsList";
+import ChannelsList from "../components/channels/ChannelsList";
 
 const ChannelsPage = () => {
 	return (
