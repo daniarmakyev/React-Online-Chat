@@ -64,10 +64,9 @@ const UserSearch = () => {
 				className="w-full px-4 py-2 bg-white rounded-md shadow-[0_0_20px_5px_rgba(255,255,255,0.6)] focus:outline focus:outline-gray-500 relative z-30"
 			/>
 
-			{searchLoading && <Loader />}
-
 			{showDropdown && (
 				<ul className="absolute z-30 w-full mt-1 bg-white rounded-lg shadow-lg max-h-60 overflow-y-auto">
+					<li>{searchLoading && <Loader />}</li>
 					{searchResults.map((user) => (
 						<li
 							key={user._id}
