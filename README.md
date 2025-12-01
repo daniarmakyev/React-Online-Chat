@@ -55,26 +55,6 @@ A real-time chat application built with React, TypeScript, Redux Toolkit, Socket
 
 ---
 
-## Environment Variables
-
-### Frontend (.env)
-
-```env
-VITE_API_URL=http://localhost:3000
-VITE_SOCKET_URL=http://localhost:3012
-```
-
-### Backend (.env)
-
-```env
-PORT=3000
-SOCKET_PORT=3012
-MONGODB_URI=mongodb://localhost:27017/chat-app
-JWT_SECRET=your_jwt_secret_key
-```
-
----
-
 ## API Endpoints
 
 ### Authentication
